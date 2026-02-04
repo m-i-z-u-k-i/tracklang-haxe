@@ -2,4 +2,3 @@
 -D analyzer-optimize
 -main Main
 --cpp bin/cpp
---python bin/python/main.py
