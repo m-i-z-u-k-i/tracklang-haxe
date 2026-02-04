@@ -12,15 +12,15 @@ class Translator {
 
 		for (k in Operators.map.keys()) {
 			var v = Operators.map.get(k);
-			StringTools.replace(line, k, v);
+			line = StringTools.replace(line, k, v);
 		}
 
 		if (StringTools.startsWith(line, "CHAT ")) {
 			var rest = StringTools.trim(line.substring("CHAT ".length));
 			if (!(StringTools.startsWith(rest, "(") && StringTools.endsWith(rest, ")"))) {
-				rest = '($rest)';
+				rest = '(' + rest + ')';
 			}
-			return 'print$rest';
+			return 'print' + rest;
 		}
 
 		if (StringTools.startsWith(line, "INSTALLOPENPLANETPLUGIN ")) {
@@ -28,23 +28,26 @@ class Translator {
 			if (parts.indexOf("AS") != -1) {
 				var module = parts[1];
 				var alias = parts[3];
-				return 'import $module as $alias';
+				return 'import ' + module + ' as ' + alias;
 			} else {
 				var module = parts[1];
-				return 'import $module';
+				return 'import ' + module;
 			}
 		}
 
 		if (StringTools.startsWith(line, "DOWNLOADFROMNADEO ")) {
 			var parts = line.split(" ");
+			if (parts.length < 3) {
+				throw "DOWNLOADFROMNADEO expects two arguments: <module> <thing>";
+			}
 			var module = parts[1];
 			var thing = parts[2];
-			return 'from $module import $thing';
+			return "from " + module + " import " + thing;
 		}
 
 		for (k in SimpleKeywords.map.keys()) {
 			var v = SimpleKeywords.map.get(k);
-			StringTools.replace(line, k, v);
+			line = StringTools.replace(line, k, v);
 		}
 
 		return line;
